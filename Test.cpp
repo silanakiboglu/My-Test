@@ -50,6 +50,48 @@ public:
             cout << "Node " << i << " -> " << dist[i] << endl;
         }
     }
+
+    void bellmanFord(int src) {
+    vector<int> dist(V, numeric_limits<int>::max());
+    dist[src] = 0;
+
+    // edge list oluştur
+    vector<tuple<int, int, int>> edges;
+    for (int u = 0; u < V; u++) {
+        for (auto &p : adj[u]) {
+            edges.push_back({u, p.first, p.second});
+        }
+    }
+
+    // V-1 kez relax
+    for (int i = 0; i < V - 1; i++) {
+        for (auto &e : edges) {
+            int u, v, w;
+            tie(u, v, w) = e;
+
+            if (dist[u] != numeric_limits<int>::max() && dist[u] + w < dist[v]) {
+                dist[v] = dist[u] + w;
+            }
+        }
+    }
+
+    // negative cycle kontrol (opsiyonel ama iyi puan)
+    for (auto &e : edges) {
+        int u, v, w;
+        tie(u, v, w) = e;
+
+        if (dist[u] != numeric_limits<int>::max() && dist[u] + w < dist[v]) {
+            cout << "Negative cycle detected!\n";
+            return;
+        }
+    }
+
+    // print
+    cout << "\nBellman-Ford distances from node " << src << ":\n";
+    for (int i = 0; i < V; i++) {
+        cout << "Node " << i << " -> " << dist[i] << endl;
+    }
+}
 };
 
 int main() {
@@ -63,6 +105,8 @@ int main() {
     g.addEdge(2, 4, 3);
 
     g.dijkstra(0);
+
+    g.bellmanFord(0);
 
     return 0;
 }

@@ -1,6 +1,3 @@
-sssp_benchmark
-.DS_Store
-results/*.csv
-plots/*.svg
 *.gr
 *.gr.gz
+*.csv
